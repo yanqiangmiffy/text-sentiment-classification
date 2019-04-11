@@ -12,7 +12,7 @@ import numpy as np
 from keras.models import Model
 from keras.callbacks import ModelCheckpoint
 from keras.layers import Input,Embedding,Flatten,Concatenate,Dense
-from keras.layers import Conv1D,MaxPool1D,SpatialDropout1D,Dropout
+from keras.layers import Conv1D,MaxPool1D,SpatialDropout1D,Dropout,BatchNormalization
 from create_dict import *
 from create_input import build_input
 from matplotlib import pyplot
@@ -43,7 +43,9 @@ convs=[]
 filter_sizes=[2,3,4,5]
 for fs in filter_sizes:
     l_conv=Conv1D(filters=128,kernel_size=fs)(embed)
-    l_conv=Dropout(0.5)(l_conv)
+    l_conv=BatchNormalization()(l_conv)
+    l_conv=Dropout(0.25)(l_conv)
+
     l_pool=MaxPool1D(MAX_LEN-fs+1)(l_conv)
     l_pool=Flatten()(l_pool)
     convs.append(l_pool)
@@ -67,7 +69,7 @@ print(y_pred)
 print(y_pred[:,1])
 test_df=pd.read_csv('data/test.csv',lineterminator='\n')
 test_df['Pred']=y_pred[:,1]
-test_df[['ID','Pred']].to_csv('result/cnn.csv',index=None)
+test_df[['ID','Pred']].to_csv('result/attention.csv',index=None)
 pyplot.plot(history.history['acc'], label='train')
 pyplot.plot(history.history['val_acc'], label='test')
 pyplot.legend()
