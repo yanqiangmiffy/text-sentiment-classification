@@ -17,14 +17,15 @@ from create_dict import *
 from create_input import build_input
 from matplotlib import pyplot
 # 超参数设置
-MAX_NUM_WORDS = 30000
+# MAX_NUM_WORDS = 30000
 EMBEDDING_DIM = 100
-MAX_LEN=50
+MAX_LEN=20
 CLASS_NUM=2
 
 # 加载数据
-vocab, vocab_re = load_label_dict()
-# MAX_NUM_WORDS=len(vocab)+1
+vocab, vocab_re = load_dict()
+print(len(vocab))
+MAX_NUM_WORDS=len(vocab)
 label_dict, label_dict_re = load_label_dict()
 embedding_index = load_embedding_index()
 embedding_matrix = load_embedding_matrix(vocab, embedding_index,MAX_NUM_WORDS,EMBEDDING_DIM)
@@ -35,11 +36,11 @@ x_train,y_train,x_test=build_input()
 # 创建模型
 input=Input(shape=(MAX_LEN,),dtype="int32",name="input")
 # Embedding layer
-embed=Embedding(input_dim=MAX_NUM_WORDS,output_dim=EMBEDDING_DIM,name="embed_layer")(input)
-embed=SpatialDropout1D(0.5)(embed)
+embed=Embedding(input_dim=MAX_NUM_WORDS+1,output_dim=EMBEDDING_DIM,weights=[embedding_matrix],name="embed_layer")(input)
+embed=SpatialDropout1D(0.25)(embed)
 # Conv layer
 convs=[]
-filter_sizes=[3,4,5]
+filter_sizes=[2,3,4,5]
 for fs in filter_sizes:
     l_conv=Conv1D(filters=128,kernel_size=fs)(embed)
     l_conv=Dropout(0.5)(l_conv)
@@ -48,9 +49,9 @@ for fs in filter_sizes:
     convs.append(l_pool)
 
 merge=Concatenate()(convs)
-output=Dropout(0.5)(merge)
-output=Dense(units=64,activation='relu')(output)
-output=Dropout(0.5)(output)
+output=Dropout(0.25)(merge)
+output=Dense(units=128,activation='relu')(output)
+output=Dropout(0.25)(output)
 output=Dense(units=2,activation='softmax')(output)
 
 model=Model([input],output)
@@ -66,7 +67,7 @@ print(y_pred)
 print(y_pred[:,1])
 test_df=pd.read_csv('data/test.csv',lineterminator='\n')
 test_df['Pred']=y_pred[:,1]
-test_df[['ID','Pred']].to_csv('cnn.csv',index=None)
+test_df[['ID','Pred']].to_csv('result/cnn.csv',index=None)
 pyplot.plot(history.history['acc'], label='train')
 pyplot.plot(history.history['val_acc'], label='test')
 pyplot.legend()

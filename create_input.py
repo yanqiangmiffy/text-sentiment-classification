@@ -14,10 +14,11 @@ import numpy as np
 
 train = pd.read_csv('data/train.csv', lineterminator='\n')
 test = pd.read_csv('data/test.csv', lineterminator='\n')
+# print(train['review'].apply(lambda x:len(x.split(' '))).describe())
 # print(test['review'].apply(lambda x:len(x.split(' '))).describe())
 
 # 设置参数
-MAX_LEN = 50
+MAX_LEN = 20
 
 
 def build_input():
