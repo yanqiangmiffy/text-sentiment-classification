@@ -77,6 +77,8 @@ def create(file_dir, dict_path, label_path):
             sentences = df['review'].values
             for sent in sentences:
                 sent = clean_str(sent)
+                if 'chy nae lgty' in sent:
+                    print(sent)
                 words = sent.split(' ')
                 for word in words:
                     if word not in word_dict:
