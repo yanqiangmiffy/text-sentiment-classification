@@ -1,3 +1,4 @@
 data/glove.txt
 .idea/
 __pycache__/
+.ipynb_checkpoints/
