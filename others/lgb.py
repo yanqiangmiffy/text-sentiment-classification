@@ -23,8 +23,8 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 
 # %%
-df_train = pd.read_csv('data/train.csv', lineterminator='\n')
-df_test = pd.read_csv('data/test.csv', lineterminator='\n')
+df_train = pd.read_csv('../data/train.csv', lineterminator='\n')
+df_test = pd.read_csv('../data/test.csv', lineterminator='\n')
 # %%
 df_train['label'] = df_train['label'].map({'Negative': 0, 'Positive': 1})
 df_train.head()
