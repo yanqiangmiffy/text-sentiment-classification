@@ -58,7 +58,7 @@ print(y_pred)
 print(y_pred[:, 1])
 test_df = pd.read_csv('data/test.csv', lineterminator='\n')
 test_df['Pred'] = y_pred[:, 1]
-test_df[['ID', 'Pred']].to_csv('resutl/bi_lstm.csv', index=None)
+test_df[['ID', 'Pred']].to_csv('result/bi_lstm.csv', index=None)
 pyplot.plot(history.history['acc'], label='train')
 pyplot.plot(history.history['val_acc'], label='test')
 pyplot.legend()

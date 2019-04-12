@@ -1,2 +1,3 @@
 data/glove.txt
 .idea/
+__pycache__/
